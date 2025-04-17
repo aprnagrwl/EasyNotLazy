@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>EasynotLazy</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 scroll-smooth">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -41,9 +46,9 @@
 
         function Slideshow() {
             const images = [
-                "https://m.media-amazon.com/images/I/41lArSiD5hL.jpg",
-                "https://www.gonoise.com/cdn/shop/files/Artboard_10.webp?v=1738306745",
-                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQB27pP08NnG8z_X-T5O4YKjFPy8H9cHqRrHjKU8xCToY31DcI3Khhi8Zmyl7TGVLb2NkyoFwmbcTDq5td7RZB0aAKstUY1KfAwx1340x4Tju1Yfc7d3kEa6A"
+                { url: "https://m.media-amazon.com/images/I/41lArSiD5hL.jpg", link: "#product-1" },
+                { url: "https://www.gonoise.com/cdn/shop/files/Artboard_10.webp?v=1738306745", link: "#product-2" },
+                { url: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQB27pP08NnG8z_X-T5O4YKjFPy8H9cHqRrHjKU8xCToY31DcI3Khhi8Zmyl7TGVLb2NkyoFwmbcTDq5td7RZB0aAKstUY1KfAwx1340x4Tju1Yfc7d3kEa6A", link: "#product-3" }
             ];
 
             const [index, setIndex] = useState(0);
@@ -57,7 +62,9 @@
 
             return (
                 <div className="relative w-full max-w-3xl mx-auto mt-20">
-                    <img src={images[index]} alt="Product" className="w-full h-64 object-contain rounded-md shadow-lg" />
+                    <a href={images[index].link}>
+                        <img src={images[index].url} alt="Product" className="w-full h-64 object-contain rounded-md shadow-lg cursor-pointer" />
+                    </a>
                     <button onClick={() => setIndex((index - 1 + images.length) % images.length)} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-2 py-1 rounded-l">
                         ◀
                     </button>
@@ -89,7 +96,7 @@
                     <h1 className="text-2xl font-bold mb-4">Products</h1>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {products.map((product) => (
-                            <div key={product.id} className="p-4 border rounded-lg shadow-lg bg-white">
+                            <div key={product.id} id={`product-${product.id}`} className="p-4 border rounded-lg shadow-lg bg-white">
                                 <img src={product.image} alt={product.name} className="w-40 h-32 object-contain mx-auto rounded-md" />
                                 <h2 className="text-xl font-semibold">{product.name}</h2>
                                 <p className="text-gray-600">{product.description}</p>
@@ -165,10 +172,7 @@
                         )}
                     </div>
 
-                    <div id="checkout-section" className="max-w-4xl mx-auto p-6">
-                        <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-                        <p className="text-lg font-semibold">Total Amount: ₹{totalAmount}</p>
-                    </div>
+                    <Checkout totalAmount={totalAmount} />
                 </div>
             );
         }
